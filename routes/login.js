@@ -36,7 +36,7 @@ router.post("/", (req, res) => {
 
 
 // USER AUTHENTICATION BY TOKEN
-router.get("/", (req, res) => {
+router.get("/",  (req, res) => {
   const autHeader = req.headers["authorization"];
   const token = autHeader && autHeader.split(' ')[1];
   if (!token)
@@ -57,6 +57,10 @@ router.get("/", (req, res) => {
         if (error)
           return res.status(401).send("There was a problem finding the user.");
         if (!result) return res.status(404).send("No user found.");
+        console.log(result);
+        if(result){
+          const validPassword =  bcrypt.compare(body.password, user.password);
+        }
         res.status(200).send(result);
       }
     );

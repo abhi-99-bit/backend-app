@@ -2,7 +2,6 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const userLoginRouter = require("./routes/login");
@@ -10,14 +9,15 @@ const userExpenses = require("./routes/posts");
 const userDetails = require("./routes/userDetailsById");
 const userPostInsert = require("./routes/insertUserExpenses");
 const userPostUpdate = require("./routes/updateExpenses");
-const deleteExpenses = require('./routes/deleteExpenses');
-const getTodayExpense = require('./routes/today');
-const getWeeklyExpenses = require('./routes/weekly');
-const getMonthlyExpense = require('./routes/monthly');
-const cors = require('cors')
+const deleteExpenses = require("./routes/deleteExpenses");
+const getTodayExpense = require("./routes/today");
+const getWeeklyExpenses = require("./routes/weekly");
+const getMonthlyExpense = require("./routes/monthly");
+const updateUserDetails = require("./routes/updateUserDetails");
+const cors = require("cors");
 
 var app = express();
-app.use(cors())
+app.use(cors());
 
 app.disable("etag");
 app.use(logger("dev"));
@@ -37,4 +37,5 @@ app.use("/user/delete-expenses/:id", deleteExpenses);
 app.use("/user/today-expenses", getTodayExpense);
 app.use("/user/weekly-expnses", getWeeklyExpenses);
 app.use("/user/monthly-expnses", getMonthlyExpense);
+app.use("/user/edit-details", updateUserDetails);
 module.exports = app;
