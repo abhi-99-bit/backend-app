@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const mysql = require("mysql");
 const { validationResult } = require("express-validator");
 const { validateEmail } = require("../validator");
+const saltRounds = 10;
 
 router.post("/", [validateEmail], async(req, res) => {
   let connection = mysql.createConnection({
@@ -28,14 +29,14 @@ router.post("/", [validateEmail], async(req, res) => {
     return res.send(errors);
 
   }else {
-    const salt = await bcrypt.genSalt(10);
-    let password = await bcrypt.hash(req.body.password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    let encryptedPassword = await bcrypt.hash(req.body.password, saltRounds);
     let user_details = {
       user_id: null,
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
-      password: password,
+      password: encryptedPassword,
       accept_tc: parseInt(req.body.accept_tc),
     };
     var sql = "INSERT INTO users SET ? ";
