@@ -5,11 +5,7 @@ module.exports = {
   validateEmail: check("email")
     .isEmail()
 
-    // Custom message
     .withMessage("Invalid email")
-
-    // Custom validation
-    // Validate email in use or not
 
     .custom((email) => {
       return new Promise((resolve, reject) => {

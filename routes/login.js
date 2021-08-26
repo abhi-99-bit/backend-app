@@ -6,17 +6,17 @@ const connection = require("../connection");
 const bcrypt = require("bcrypt");
 
 // USER LOGIN API AND CREATE TOKEN BY JWT
-router.post("/",  async(req, res) => {
+router.post("/", async (req, res) => {
   console.log(req.body);
   //var user_id = req.body.user_id;
   var email = req.body.email;
   var password = req.body.password;
   console.log(email, password);
-   connection.query(
+  await connection.query(
     "SELECT user_id, first_name , last_name , email ,password FROM users WHERE email = ?",
     [email],
     async (error, results) => {
-      console.log(results[0].user_id , results[0].password);
+      console.log(results[0].user_id, results[0].password);
 
       if (error) {
         res.send({
@@ -26,8 +26,9 @@ router.post("/",  async(req, res) => {
         });
       } else {
         let size = Object.keys(results).length;
+        let comparison;
         if (size > 0) {
-          const comparison = await bcrypt.compare(password,results[0].password);
+          comparison = await bcrypt.compare(password, results[0].password);
           if (comparison) {
             const token = jwt.sign(
               { id: results[0].user_id },
@@ -35,15 +36,13 @@ router.post("/",  async(req, res) => {
               { expiresIn: 86400 },
               { algorithm: "RS256" }
             );
-            res
-              .status(200)
-              .send({
-                auth: true,
-                token: token,
-                results,
-                code: 200,
-                success: "login successful",
-              });
+            res.status(200).send({
+              auth: true,
+              token: token,
+              results,
+              code: 200,
+              success: "login successful",
+            });
           } else {
             res.send({
               code: 204,
@@ -110,4 +109,3 @@ router.get("/", (req, res) => {
 });
 
 module.exports = router;
-

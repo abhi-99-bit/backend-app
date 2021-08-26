@@ -6,7 +6,7 @@ const { validationResult } = require("express-validator");
 const { validateEmail } = require("../validator");
 const saltRounds = 10;
 
-router.post("/", [validateEmail], async(req, res) => {
+router.post("/", [validateEmail], async (req, res) => {
   let connection = mysql.createConnection({
     host: "127.0.0.1",
     user: "nodejs",
@@ -23,13 +23,10 @@ router.post("/", [validateEmail], async(req, res) => {
   });
   // console.log(req.body);
   const errors = validationResult(req);
-    console.log(errors,"this is error---------------------------------");
+  console.log(errors, "this is error---------------------------------");
   if (!errors.isEmpty()) {
-    
     return res.send(errors);
-
-  }else {
-    // const salt = await bcrypt.genSalt(10);
+  } else {
     let encryptedPassword = await bcrypt.hash(req.body.password, saltRounds);
     let user_details = {
       user_id: null,
@@ -56,10 +53,8 @@ router.post("/", [validateEmail], async(req, res) => {
         res.status(200).send(data);
       }
     });
-   
   }
 
-  
   // var sql = " SELECT * FROM users WHERE email = ?";
   // connection.query(sql, user_details.email, (error, result) => {
   //   if (error) throw error;
